@@ -129,7 +129,7 @@ Bilal Ahmed,QA Engineer,Engineering,Quality,2026-05-18,2026-11-18,Sarah Ali,Plat
 /* ============================================================
    HELPERS
    ============================================================ */
-const today = () => new Date('2026-05-07');
+const today = () => new Date();
 
 const parseDate = (s) => {
   if (!s) return null;
