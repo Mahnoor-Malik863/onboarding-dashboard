@@ -360,7 +360,10 @@ export default function App() {
   const [lastRefreshed, setLastRefreshed] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [csvUrl, setCsvUrl] = useState('');
+  const [csvUrl, setCsvUrl] = useState(() => {
+    try { return localStorage.getItem('codeninja_csv_url') || ''; }
+    catch { return ''; }
+  });
   const [showSettings, setShowSettings] = useState(false);
 
   // Status overrides + evidence
@@ -409,7 +412,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    loadData('');
+    loadData(csvUrl);
     const iv = setInterval(() => loadData(csvUrl), 120000);
     return () => clearInterval(iv);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -639,7 +642,11 @@ export default function App() {
       {showSettings && (
         <SettingsModal
           csvUrl={csvUrl} setCsvUrl={setCsvUrl}
-          onApply={() => { loadData(csvUrl); setShowSettings(false); }}
+          onApply={() => {
+            try { localStorage.setItem('codeninja_csv_url', csvUrl); } catch {}
+            loadData(csvUrl);
+            setShowSettings(false);
+          }}
           onClose={() => setShowSettings(false)}
         />
       )}
